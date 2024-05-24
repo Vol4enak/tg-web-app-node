@@ -52,7 +52,7 @@ bot.on("message", async (msg) => {
 });
 
 
-app.post("/", async (req, res) => {
+app.post("/web-data", async (req, res) => {
   const { queryId, products, totalPrice } = req.body;
 
   try {
@@ -60,7 +60,7 @@ app.post("/", async (req, res) => {
       type: "article",
       id: queryId,
       title: "Успешна покупка",
-      input_message_contentL: {
+      input_message_content: {
         message_text: "конграц с покупкой товара на:" + totalPrice,
       },
     });
@@ -70,7 +70,7 @@ app.post("/", async (req, res) => {
       type: "article",
       id: queryId,
       title: "Не удалось совершить покупку",
-      input_message_contentL: {
+      input_message_content: {
         message_text: "соболезнуем с неудачной покупкой товара",
       },
     });
