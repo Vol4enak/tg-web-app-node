@@ -62,7 +62,7 @@ app.post("/web-data", async (req, res) => {
         message_text: "конграц с покупкой товара на:" + totalPrice,
       },
     });
-    return res.status(200);
+    return res.status(200).json({});
   } catch (e) {
     await bot.answerWebAppQuery(queryId, {
       type: "article",
@@ -77,4 +77,4 @@ app.post("/web-data", async (req, res) => {
 });
 
 const PORT = process.env.PORT || 8000;
-app.listen(PORT, () => console.log("server started on PORT 8000"));
+app.listen(PORT, () => console.log("server started on PORT: " + PORT));
