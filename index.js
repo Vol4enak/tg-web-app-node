@@ -50,11 +50,9 @@ bot.on("message", async (msg) => {
     }
   }
 });
-app.get("/", (req, res) => {
-  res.send("helppppp");
-});
 
-app.post("/webdata", async (req, res) => {
+
+app.post("/", async (req, res) => {
   const { queryId, products, totalPrice } = req.body;
 
   try {
