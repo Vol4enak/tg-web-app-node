@@ -6,9 +6,8 @@ require("dotenv").config();
 const token = process.env.BOT_KEY;
 const wedAppUrl = "https://adorable-lebkuchen-d0f7d9.netlify.app";
 
-const bot = new TelegramBot(token, { polling: true });
+const bot = new TelegramBot(token);
 const app = express();
-
 
 app.use(express.json());
 app.use(cors());
@@ -16,19 +15,23 @@ bot.on("message", async (msg) => {
   const chatId = msg.chat.id;
   const text = msg.text;
 
-  bot.sendMessage(
-    chatId,
-    "Вітаю у боті в якому ви зможете зручно знайти ваші улюблені товари."
-  );
-
   if (text === "/start") {
-    await bot.sendMessage(chatId, "Ниже кнопочка", {
-      reply_markup: {
-        keyboard: [
-          [{ text: "заполнить форму", web_app: { url: wedAppUrl + "/form" } }],
-        ],
-      },
-    });
+    await bot.sendMessage(
+      chatId,
+      "Вітаю у боті в якому ви зможете зручно знайти ваші улюблені товари.",
+      {
+        reply_markup: {
+          keyboard: [
+            [
+              {
+                text: "заполнить форму",
+                web_app: { url: wedAppUrl + "/form" },
+              },
+            ],
+          ],
+        },
+      }
+    );
     await bot.sendMessage(chatId, "Заходи к нам", {
       reply_markup: {
         inline_keyboard: [
