@@ -15,7 +15,10 @@ bot.on("message", async (msg) => {
   const chatId = msg.chat.id;
   const text = msg.text;
 
-  bot.sendMessage(chatId, "Received your message");
+  bot.sendMessage(
+    chatId,
+    "Вітаю у боті в якому ви зможете зручно знайти ваші улюблені товари."
+  );
 
   if (text === "/start") {
     await bot.sendMessage(chatId, "Ниже кнопочка", {
@@ -51,7 +54,6 @@ bot.on("message", async (msg) => {
   }
 });
 
-
 app.post("/web-data", async (req, res) => {
   const { queryId, products, totalPrice } = req.body;
 
@@ -77,6 +79,8 @@ app.post("/web-data", async (req, res) => {
     return res.status(500).json({});
   }
 });
+
+
 
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => console.log("server started on PORT: " + PORT));
