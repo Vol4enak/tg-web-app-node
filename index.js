@@ -1,4 +1,5 @@
 const TelegramBot = require("node-telegram-bot-api");
+const request = require("request");
 const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
@@ -9,6 +10,26 @@ const wedAppUrl = "https://adorable-lebkuchen-d0f7d9.netlify.app";
 const bot = new TelegramBot(token, { polling: true });
 const app = express();
 
+function ex() {
+  const options = {
+    method: "POST",
+    url: "https://shop-21275.x9.co.ua/api/auth",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      login: "king5vadim@gmail.com",
+      password: "20020813",
+    }),
+  };
+  request(options, function (err, res) {
+    if (err) console.log(err);
+    let data = res.body;
+    data = JSON.parse(data);
+    console.log(data);
+  });
+}
+ex();
 app.use(express.json());
 app.use(cors());
 bot.on("message", async (msg) => {
@@ -79,8 +100,6 @@ app.post("/web-data", async (req, res) => {
     return res.status(500).json({});
   }
 });
-
-
 
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => console.log("server started on PORT: " + PORT));
