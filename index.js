@@ -1,30 +1,10 @@
 const TelegramBot = require("node-telegram-bot-api");
 const express = require("express");
 const cors = require("cors");
-const { searchProduct } = require("./search");
-const { fetchProductData } = require("./scraper");
 
 const token = process.env.BOT_KEY;
 const wedAppUrl = "https://adorable-lebkuchen-d0f7d9.netlify.app";
 
-async function main(productName) {
-  const storeUrls = await searchProduct(productName);
-  console.log("URLs to fetch:", storeUrls);
-  const productData = [];
-
-  for (const url of storeUrls) {
-    try {
-      const data = await fetchProductData(url);
-      productData.push(data);
-    } catch (error) {
-      console.error(`Failed to fetch data from ${url}:`, error.message);
-    }
-  }
-
-  console.log("Final product data:", productData);
-}
-
-main("iPhone 13").catch(console.error);
 
 const bot = new TelegramBot(token, { polling: true });
 const app = express();
