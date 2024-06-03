@@ -123,5 +123,5 @@ app.get("/api/products", async (req, res) => {
     res.status(500).send("Ошибка сервера");
   }
 });
-
+console.log(1)
 app.listen(PORT, () => console.log("server started on PORT: " + PORT));
