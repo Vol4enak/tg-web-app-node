@@ -6,6 +6,8 @@ const token = "6747409661:AAEMQbvDDhrESv6zPqNwSv8IiYbp9C2Vvic";
 const wedAppUrl = "https://adorable-lebkuchen-d0f7d9.netlify.app";
 
 
+
+
 const bot = new TelegramBot(token, { polling: true });
 const app = express();
 
