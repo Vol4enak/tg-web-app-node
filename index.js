@@ -89,13 +89,38 @@ app.post("/web-data", async (req, res) => {
 
 app.get("/api/data", async (req, res) => {
   try {
-    const response = await axios.get("https://fakestoreapi.com/products"); // Замените на реальный URL
+    const response = await axios.get("https://fakestoreapi.in/api/products");
 
     res.json(response.data);
   } catch (error) {
-    console.error("Error fetching data:", error.message); // Логируем ошибку
+    console.error("Error fetching data:", error.message);
 
     res.status(500).json({ error: "Ошибка при получении данных" });
+  }
+});
+app.get("/api/category", async (req, res) => {
+  try {
+    const response = await axios.get(
+      "https://fakestoreapi.in/api/products/category"
+    );
+
+    res.json(response.data);
+  } catch (error) {
+    console.error("Error fetching data:", error.message);
+
+    res.status(500).json({ error: "Ошибка при получении данных" });
+  }
+});
+app.get("/api/products", async (req, res) => {
+  const category = req.query.category; 
+  try {
+    const response = await axios.get(
+      `https://fakestoreapi.in/api/products/category?type=${category}`
+    );
+    res.json(response.data);
+  } catch (error) {
+    console.error("Ошибка при запросе к внешнему API: ", error);
+    res.status(500).send("Ошибка сервера");
   }
 });
 
