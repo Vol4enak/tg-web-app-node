@@ -111,7 +111,7 @@ app.get("/api/category", async (req, res) => {
     res.status(500).json({ error: "Ошибка при получении данных" });
   }
 });
-app.get("/api/products", async (req, res) => {
+app.get("/api/productsByCategory", async (req, res) => {
   const category = req.query.category; 
   try {
     const response = await axios.get(
