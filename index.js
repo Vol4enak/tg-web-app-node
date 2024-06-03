@@ -1,15 +1,14 @@
 const TelegramBot = require("node-telegram-bot-api");
+const axios = require("axios"); // Убедитесь, что axios импортирован
 const express = require("express");
 const cors = require("cors");
 
 const token = "6747409661:AAEMQbvDDhrESv6zPqNwSv8IiYbp9C2Vvic";
 const wedAppUrl = "https://adorable-lebkuchen-d0f7d9.netlify.app";
 
-
-
-
 const bot = new TelegramBot(token, { polling: true });
 const app = express();
+const PORT = process.env.PORT || 8000;
 
 app.use(express.json());
 app.use(cors());
@@ -88,5 +87,16 @@ app.post("/web-data", async (req, res) => {
   }
 });
 
-const PORT = process.env.PORT || 8000;
+app.get("/api/data", async (req, res) => {
+  try {
+    const response = await axios.get("https://fakestoreapi.com/products"); // Замените на реальный URL
+
+    res.json(response.data);
+  } catch (error) {
+    console.error("Error fetching data:", error.message); // Логируем ошибку
+
+    res.status(500).json({ error: "Ошибка при получении данных" });
+  }
+});
+
 app.listen(PORT, () => console.log("server started on PORT: " + PORT));
