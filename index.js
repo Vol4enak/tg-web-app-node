@@ -89,7 +89,9 @@ app.post("/web-data", async (req, res) => {
 
 app.get("/api/data", async (req, res) => {
   try {
-    const response = await axios.get("https://fakestoreapi.in/api/products");
+    const response = await axios.get(
+      "https://fakestoreapi.in/api/products?page=1"
+    );
 
     res.json(response.data);
   } catch (error) {
@@ -112,7 +114,7 @@ app.get("/api/category", async (req, res) => {
   }
 });
 app.get("/api/productsByCategory", async (req, res) => {
-  const category = req.query.category; 
+  const category = req.query.category;
   try {
     const response = await axios.get(
       `https://fakestoreapi.in/api/products/category?type=${category}`
