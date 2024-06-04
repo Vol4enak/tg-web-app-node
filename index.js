@@ -90,7 +90,7 @@ app.post("/web-data", async (req, res) => {
 app.get("/api/data", async (req, res) => {
   try {
     const response = await axios.get(
-      "https://fakestoreapi.in/api/products?page=1"
+      "https://fakestoreapi.in/api/products?page=1&limit=20"
     );
 
     res.json(response.data);
