@@ -1,17 +1,31 @@
 const TelegramBot = require("node-telegram-bot-api");
-const axios = require("axios"); // Убедитесь, что axios импортирован
+const axios = require("axios");
+const logger = require("morgan");
 const express = require("express");
 const cors = require("cors");
-
+const productsRoute = require("./routes/api/products");
 const token = "6747409661:AAEMQbvDDhrESv6zPqNwSv8IiYbp9C2Vvic";
 const wedAppUrl = "https://adorable-lebkuchen-d0f7d9.netlify.app";
 
 const bot = new TelegramBot(token, { polling: true });
 const app = express();
-const PORT = process.env.PORT || 8000;
+const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 
+app.use(logger(formatsLogger));
 app.use(express.json());
 app.use(cors());
+app.use("/api/products", productsRoute);
+
+app.use((req, res) => {
+  res.status(404).json({ message: "Not found" });
+});
+
+app.use((err, req, res, next) => {
+  const { status = 500, message = "Server error" } = err;
+
+  res.status(status).json({ message });
+});
+
 bot.on("polling_error", (error) => {});
 
 bot.on("message", async (msg) => {
@@ -125,4 +139,5 @@ app.get("/api/productsByCategory", async (req, res) => {
     res.status(500).send("Ошибка сервера");
   }
 });
-app.listen(PORT, () => console.log("server started on PORT: " + PORT));
+
+module.exports = app;
