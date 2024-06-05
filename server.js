@@ -5,7 +5,7 @@ const PORT = process.env.PORT || 8000;
 
 mongoose
   .connect(
-    "mongodb+srv://Vol4enak:iEmZCT4wzixEnZ0o@cluster0.dvnafo9.mongodb.net/"
+    "mongodb+srv://Vol4enak:iEmZCT4wzixEnZ0o@cluster0.dvnafo9.mongodb.net/products_sample"
   )
 
   .then(() => {
