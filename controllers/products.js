@@ -3,7 +3,7 @@ const { Product } = require("../models/product");
 const { HttpError, ctrlWrapper } = require("../helpers");
 
 const getAll = async (req, res) => {
-  const result = await Contact.find({});
+  const result = await Product.find({});
   console.log(result);
   res.status(200).json({ result });
 };
