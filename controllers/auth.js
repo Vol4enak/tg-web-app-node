@@ -1,4 +1,5 @@
 const bcrypt = require("bcrypt");
+require("dotenv").config();
 const jwt = require("jsonwebtoken");
 const { User } = require("../models/user");
 const { ctrlWrapper, HttpError } = require("../helpers");
@@ -41,11 +42,10 @@ const login = async (req, res) => {
   };
 
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
-//   await User.findByIdAndUpdate(user._id, { token });
+  //   await User.findByIdAndUpdate(user._id, { token });
 
   res.json({
     token,
-   
   });
 };
 
