@@ -9,7 +9,7 @@ const getAll = async (req, res) => {
   const result = await Product.find({ owner }, "-createAt -updatedAt", {
     skip, 
     limit,
-  }).populate("owner", "email subscription");
+  }).populate("owner", "email");
 
   res.status(200).json({ result });
 };
