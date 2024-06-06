@@ -5,9 +5,9 @@ const express = require("express");
 const cors = require("cors");
 const productsRoute = require("./routes/api/products");
 const fakeStoreRoute = require("./routes/api/fakeStore");
-const authRouter = require("./routes/api/auth")
-const token = "6747409661:AAEMQbvDDhrESv6zPqNwSv8IiYbp9C2Vvic";
-const wedAppUrl = "https://adorable-lebkuchen-d0f7d9.netlify.app";
+const authRouter = require("./routes/api/auth");
+const token = require("./config");
+const wedAppUrl = require("./config");
 
 const bot = new TelegramBot(token, { polling: true });
 const app = express();

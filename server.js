@@ -2,11 +2,12 @@ const mongoose = require("mongoose");
 
 const app = require(".");
 const PORT = process.env.PORT || 8000;
+const { DB_HOST } = require("./config");
+
+mongoose.set("strictQuery", true);
 
 mongoose
-  .connect(
-    "mongodb+srv://Vol4enak:iEmZCT4wzixEnZ0o@cluster0.dvnafo9.mongodb.net/products_sample"
-  )
+  .connect(DB_HOST)
 
   .then(() => {
     app.listen(PORT, () => {
