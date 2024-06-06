@@ -16,7 +16,7 @@ app.use(logger(formatsLogger));
 app.use(express.json());
 app.use(cors());
 app.use("/api/products", productsRoute);
-app.use("./api/data", fakeStoreRoute);
+app.use("/api/data", fakeStoreRoute);
 app.use((req, res) => {
   res.status(404).json({ message: "Not found" });
 });
