@@ -23,7 +23,7 @@ router.put(
 );
 
 router.patch(
-  "/:productsId/products",
+  "/:productsId/favorite",
 
   validateBody(sсhemas.updateStatusProducts),
   ctrl.updateStatus
