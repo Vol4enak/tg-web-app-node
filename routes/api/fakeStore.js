@@ -1,15 +1,16 @@
 const express = require("express");
 
 const router = express.Router();
+const axios = require("axios");
 
 router.get("/api/data", async (req, res) => {
   try {
     const response = await axios.get(
       "https://fakestoreapi.in/api/products?page=1&limit=20"
     );
-
+   
     res.json(response.data);
-    console.log(response.data);
+ 
   } catch (error) {
     console.error("Error fetching data:", error.message);
 
