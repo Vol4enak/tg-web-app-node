@@ -73,7 +73,7 @@ const addSchema = Joi.object({
   category: Joi.string().required(),
   popular: Joi.boolean(),
   discount: Joi.number(),
-  onSale: Joi.Boolean(),
+  onSale: Joi.boolean(),
   favorite: Joi.boolean(),
   basket: Joi.boolean(),
 });
