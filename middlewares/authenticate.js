@@ -11,19 +11,33 @@ const authenticate = async (req, res, next) => {
   const [bearer, token] = authorization.split(" ");
 
   if (bearer !== "Bearer") {
-    next(HttpError(401, "Not authorized 1"));
+    return next(HttpError(401, "Not authorized 1"));
   }
+
   try {
     const { id } = jwt.verify(token, SECRET_KEY);
     const user = await User.findById(id);
-    if (!user || !user.token || user.token !== token) {
-      next(HttpError(401, "user not found"));
-    }
-    req.user = user;
 
+    if (!user) {
+      console.error("User not found with ID:", id);
+      return next(HttpError(401, "User not found"));
+    }
+
+    if (!user.token) {
+      console.error("User has no token:", user);
+      return next(HttpError(401, "User not found"));
+    }
+
+    if (user.token !== token) {
+      console.error("Token does not match. User token:", user.token, "Provided token:", token);
+      return next(HttpError(401, "User not found"));
+    }
+
+    req.user = user;
     next();
-  } catch {
-    next(HttpError(401, "Not authorized 2 "));
+  } catch (error) {
+    console.error("JWT verification failed:", error.message);
+    next(HttpError(401, "Not authorized 2"));
   }
 };
 
