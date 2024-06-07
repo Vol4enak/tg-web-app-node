@@ -33,8 +33,14 @@ const productSchema = new Schema(
     category: {
       type: String,
     },
+    popular: {
+      type: Boolean,
+    },
     discount: {
       type: Number,
+    },
+    onSale: {
+      type: Boolean,
     },
     favorite: {
       type: Boolean,
@@ -63,9 +69,11 @@ const addSchema = Joi.object({
   description: Joi.string().required(),
   brand: Joi.string().required(),
   model: Joi.string().required(),
-  color: Joi.string().required(),
+  color: Joi.string(),
   category: Joi.string().required(),
-  discount: Joi.number().required(),
+  popular: Joi.boolean(),
+  discount: Joi.number(),
+  onSale: Joi.Boolean(),
   favorite: Joi.boolean(),
   basket: Joi.boolean(),
 });
