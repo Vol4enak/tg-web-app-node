@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-require('dotenv').config();
+require("dotenv").config();
 const { User } = require("../models/user");
 
 const { HttpError } = require("../helpers");
@@ -19,25 +19,33 @@ const authenticate = async (req, res, next) => {
     const user = await User.findById(id);
 
     if (!user) {
-      console.error("User not found with ID:", id);
-      return next(HttpError(401, "User not found"));
+      console.error();
+      return next(HttpError(401, "User not found with ID:", id));
     }
 
     if (!user.token) {
-      console.error("User has no token:", user);
-      return next(HttpError(401, "User not found"));
+      console.error();
+      return next(HttpError(401, "User has no token:", user));
     }
 
     if (user.token !== token) {
-      console.error("Token does not match. User token:", user.token, "Provided token:", token);
-      return next(HttpError(401, "User not found"));
+      console.error();
+      return next(
+        HttpError(
+          401,
+          "Token does not match. User token:",
+          user.token,
+          "Provided token:",
+          token
+        )
+      );
     }
 
     req.user = user;
     next();
   } catch (error) {
-    console.error("JWT verification failed:", error.message);
-    next(HttpError(401, "Not authorized 2"));
+    console.error();
+    next(HttpError(401, "JWT verification failed:", error.message));
   }
 };
 
