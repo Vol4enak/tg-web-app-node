@@ -6,6 +6,9 @@ const Joi = require("joi");
 
 const productSchema = new Schema(
   {
+    id: {
+      type: Number,
+    },
     title: {
       type: String,
     },
@@ -53,6 +56,7 @@ const productSchema = new Schema(
 productSchema.post("save", handlerMongooseError);
 
 const addSchema = Joi.object({
+  id: Joi.number().required(),
   title: Joi.string().required(),
   image: Joi.string().required(),
   price: Joi.number().required(),
