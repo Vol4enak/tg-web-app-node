@@ -12,12 +12,12 @@ router.get("/", authenticate, ctrl.getAll);
 
 router.get("/data", ctrl.getAllData);
 
-router.get("/:productsId", authenticate, isValidId, ctrl.getById);
+router.get("/:id", authenticate, isValidId, ctrl.getById);
 
 router.post("/", authenticate, validateBody(sсhemas.addSchema), ctrl.add);
 
 router.put(
-  "/:productsId",
+  "/:id",
   isValidId,
   authenticate,
   validateBody(sсhemas.addSchema),
@@ -25,17 +25,17 @@ router.put(
 );
 
 router.patch(
-  "/:productsId/favorite",
+  "/:id/favorite",
   authenticate,
   validateBody(sсhemas.updateStatusFavorite),
   ctrl.updateStatus
 );
 router.patch(
-  "/:productsId/basket",
+  "/:id/basket",
   authenticate,
   validateBody(sсhemas.updateStatusBasket),
   ctrl.updateStatus
 );
-router.delete("/:productsId", authenticate, isValidId, ctrl.removeById);
+router.delete("/:id", authenticate, isValidId, ctrl.removeById);
 
 module.exports = router;
