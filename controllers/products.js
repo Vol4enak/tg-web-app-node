@@ -33,6 +33,21 @@ const getById = async (req, res) => {
   res.status(200).json(result);
 };
 
+const getFavorites = async (req, res) => {
+  try {
+    const favorites = await Product.find({ favorite: true }); // Поиск всех продуктов с favorite: true
+
+    if (favorites.length === 0) {
+      return res.status(404).json({ message: "No favorite products found." });
+    }
+
+    res.json(favorites);
+  } catch (error) {
+    
+    res.status(500).json({ message: 123 });
+  }
+};
+
 const add = async (req, res) => {
   const { _id: owner } = req.user;
   const result = await Product.create({ ...req.body, owner });
@@ -72,6 +87,7 @@ const updateStatus = async (req, res) => {
 
 module.exports = {
   getAllData: ctrlWrapper(getAllData),
+  getFavorites: ctrlWrapper(getFavorites),
   getAll: ctrlWrapper(getAll),
   getById: ctrlWrapper(getById),
   add: ctrlWrapper(add),
