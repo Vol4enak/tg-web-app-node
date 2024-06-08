@@ -11,7 +11,7 @@ const getAll = async (req, res) => {
     limit,
   }).populate("owner", "email");
 
-  res.status(200).json({ result });
+  res.status(200).json(result);
 };
 
 const getAllData = async (req, res) => {
@@ -21,7 +21,7 @@ const getAllData = async (req, res) => {
     skip,
     limit,
   });
-  res.status(200).json({ result });
+  res.status(200).json(result);
 };
 
 const getById = async (req, res) => {
