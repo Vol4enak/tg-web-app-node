@@ -78,14 +78,17 @@ const addSchema = Joi.object({
   basket: Joi.boolean(),
 });
 
-const updateStatus = Joi.object({
+const updateStatusFavorite = Joi.object({
   favorite: Joi.boolean(),
+});
+const updateStatusBasket = Joi.object({
   basket: Joi.boolean(),
 });
 
 const sсhemas = {
   addSchema,
-  updateStatus,
+  updateStatusFavorite,
+  updateStatusBasket,
 };
 
 const Product = model("products", productSchema);

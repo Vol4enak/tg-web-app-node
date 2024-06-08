@@ -8,15 +8,13 @@ const { validateBody, isValidId, authenticate } = require("../../middlewares");
 
 const ctrl = require("../../controllers/products");
 
-
-
 router.get("/", authenticate, ctrl.getAll);
 
-router.get("/data", ctrl.getAll);
+router.get("/data", ctrl.getAllData);
 
-router.get("/:productsId",authenticate, isValidId, ctrl.getById);
+router.get("/:productsId", authenticate, isValidId, ctrl.getById);
 
-router.post("/",authenticate, validateBody(sсhemas.addSchema), ctrl.add);
+router.post("/", authenticate, validateBody(sсhemas.addSchema), ctrl.add);
 
 router.put(
   "/:productsId",
@@ -29,9 +27,15 @@ router.put(
 router.patch(
   "/:productsId/favorite",
   authenticate,
-  validateBody(sсhemas.updateStatusProducts),
+  validateBody(sсhemas.updateStatusFavorite),
   ctrl.updateStatus
 );
-router.delete("/:productsId",authenticate, isValidId, ctrl.removeById);
+router.patch(
+  "/:productsId/basket",
+  authenticate,
+  validateBody(sсhemas.updateStatusBasket),
+  ctrl.updateStatus
+);
+router.delete("/:productsId", authenticate, isValidId, ctrl.removeById);
 
 module.exports = router;
