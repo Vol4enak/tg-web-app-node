@@ -15,7 +15,7 @@ const getAll = async (req, res) => {
 };
 
 const getAllData = async (req, res) => {
-  const result = await Contact.find({});
+  const result = await Product.find({})
   res.status(200).json({ result });
 };
 
