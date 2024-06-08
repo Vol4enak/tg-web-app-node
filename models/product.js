@@ -79,10 +79,10 @@ const addSchema = Joi.object({
 });
 
 const updateStatusFavorite = Joi.object({
-  favorite: Joi.boolean(),
+  favorite: Joi.boolean().required(),
 });
 const updateStatusBasket = Joi.object({
-  basket: Joi.boolean(),
+  basket: Joi.boolean().required(),
 });
 
 const sсhemas = {

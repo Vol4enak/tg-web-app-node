@@ -15,13 +15,13 @@ const getAll = async (req, res) => {
 };
 
 const getAllData = async (req, res) => {
-  const result = await Product.find({})
+  const result = await Product.find({});
   res.status(200).json({ result });
 };
 
 const getById = async (req, res) => {
-  const { productId } = req.params;
-  const result = await Product.findById(productId);
+  const { id } = req.params;
+  const result = await Product.findById(id);
   if (!result) {
     throw HttpError(404, "Not found");
   }
@@ -34,8 +34,8 @@ const add = async (req, res) => {
   res.status(201).json(result);
 };
 const removeById = async (req, res) => {
-  const { productId } = req.params;
-  const result = await Product.findByIdAndRemove(productId);
+  const { id } = req.params;
+  const result = await Product.findByIdAndRemove(id);
   if (!result) {
     throw HttpError(404, "Not found");
   }
@@ -44,8 +44,8 @@ const removeById = async (req, res) => {
   });
 };
 const updateById = async (req, res) => {
-  const { productId } = req.params;
-  const result = await Product.findByIdAndUpdate(productId, req.body, {
+  const { id } = req.params;
+  const result = await Product.findByIdAndUpdate(id, req.body, {
     new: true,
   });
   if (!result) {
@@ -55,11 +55,10 @@ const updateById = async (req, res) => {
 };
 
 const updateStatus = async (req, res) => {
-  const { productId } = req.params;
-  const result = await Product.findByIdAndUpdate(productId, req.body, {
+  const { id } = req.params;
+  const result = await Product.findByIdAndUpdate(id, req.body, {
     new: true,
   });
-  console.log(req.body);
   if (!result) {
     throw HttpError(404, "Not found");
   }
