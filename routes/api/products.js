@@ -8,7 +8,11 @@ const { validateBody, isValidId, authenticate } = require("../../middlewares");
 
 const ctrl = require("../../controllers/products");
 
+
+
 router.get("/", authenticate, ctrl.getAll);
+
+router.get("/data", ctrl.getAll);
 
 router.get("/:productsId",authenticate, isValidId, ctrl.getById);
 

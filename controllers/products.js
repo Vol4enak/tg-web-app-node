@@ -7,10 +7,15 @@ const getAll = async (req, res) => {
   const { page = 1, limit = 10 } = req.query;
   const skip = (page - 1) * limit;
   const result = await Product.find({ owner }, "-createAt -updatedAt", {
-    skip, 
+    skip,
     limit,
   }).populate("owner", "email");
 
+  res.status(200).json({ result });
+};
+
+const getAllData = async (req, res) => {
+  const result = await Contact.find({});
   res.status(200).json({ result });
 };
 
@@ -62,6 +67,7 @@ const updateStatus = async (req, res) => {
 };
 
 module.exports = {
+  getAllData: ctrlWrapper(getAllData),
   getAll: ctrlWrapper(getAll),
   getById: ctrlWrapper(getById),
   add: ctrlWrapper(add),
