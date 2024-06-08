@@ -17,9 +17,9 @@ router.get("/", authenticate, ctrl.getAll);
 
 router.get("/data", ctrl.getAllData);
 
-router.get("/:id", authenticate, isValidId, ctrl.getById);
 router.get("/findByStatus", isValidStatus, ctrl.getFavorites);
 
+router.get("/:id", authenticate, isValidId, ctrl.getById);
 router.post("/", authenticate, validateBody(sсhemas.addSchema), ctrl.add);
 
 router.put(
