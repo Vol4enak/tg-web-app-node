@@ -15,7 +15,12 @@ const getAll = async (req, res) => {
 };
 
 const getAllData = async (req, res) => {
-  const result = await Product.find({});
+  const { page = 1, limit = 10 } = req.query;
+  const skip = (page - 1) * limit;
+  const result = await Product.find({}, "-createAt -updatedAt", {
+    skip,
+    limit,
+  });
   res.status(200).json({ result });
 };
 
