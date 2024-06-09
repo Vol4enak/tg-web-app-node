@@ -73,33 +73,37 @@ const updateById = async (req, res) => {
   res.json(result);
 };
 
-const updateStatus = async (req, res) => {
-  const { _id: owner } = req.user;
-  const { id } = req.params;
+const toggleFavorite = async (req, res) => {
+  const { id } = req.params; // Получаем идентификатор товара из параметров запроса
+  const { userId } = req.user; // Получаем идентификатор пользователя из токена или сессии
 
-  if (!id) {
-    throw HttpError(400, "Product ID is required");
-  }
-
-  // Удаляем поле _id из req.body, если оно существует
-  const { _id, ...restBody } = req.body;
-
-  const existingProduct = await Product.findById(id);
-  if (!existingProduct) {
-    // Создаем новый продукт, если продукт не найден
-    const newProduct = await Product.create({ ...restBody, owner });
-    res.status(201).json(newProduct);
-  } else {
-    // Обновляем поле существующего продукта
-    const updatedProduct = await Product.findByIdAndUpdate(
-      id,
-      { ...restBody, owner },
-      { new: true }
-    );
-    if (!updatedProduct) {
-      throw HttpError(404, "Product not found");
+  try {
+    // Находим товар в базе данных
+    const product = await Product.findById(id);
+    console.log(product);
+    // Проверяем, существует ли товар с указанным идентификатором
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
     }
-    res.json(updatedProduct);
+
+    // Обновляем поле favorite товара на противоположное текущему значению
+    product.favorite = !product.favorite;
+
+    // Если товар добавляется в избранное, сохраняем идентификатор пользователя, который это сделал
+    if (product.favorite) {
+      product.addedBy = userId;
+    } else {
+      product.addedBy = null; // Убираем информацию о пользователе, если товар убирается из избранного
+    }
+
+    // Сохраняем обновленный товар в базе данных
+    await product.save();
+
+    // Возвращаем обновленный товар в ответе
+    res.json(product);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
   }
 };
 
@@ -111,5 +115,5 @@ module.exports = {
   add: ctrlWrapper(add),
   removeById: ctrlWrapper(removeById),
   updateById: ctrlWrapper(updateById),
-  updateStatus: ctrlWrapper(updateStatus),
+  toggleFavorite: ctrlWrapper(toggleFavorite),
 };

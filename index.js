@@ -3,7 +3,7 @@ const logger = require("morgan");
 const express = require("express");
 const cors = require("cors");
 const productsRoute = require("./routes/api/products");
-const ProductStoreRoute = require("./routes/api/productStore");
+const productStore = require("./routes/api/productStore");
 const authRouter = require("./routes/api/auth");
 const token = "6747409661:AAEMQbvDDhrESv6zPqNwSv8IiYbp9C2Vvic";
 const wedAppUrl = "https://adorable-lebkuchen-d0f7d9.netlify.app";
@@ -17,7 +17,7 @@ app.use(logger(formatsLogger));
 app.use(express.json());
 app.use(cors());
 app.use("/api/products", productsRoute);
-app.use("/api/productstore", ProductStoreRoute);
+app.use("/api/data", productStore);
 app.use("/api/auth", authRouter);
 app.use((req, res) => {
   res.status(404).json({ message: "Not found" });

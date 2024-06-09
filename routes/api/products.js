@@ -16,10 +16,10 @@ const ctrl = require("../../controllers/products");
 router.get("/", authenticate, ctrl.getAll);
 
 router.get("/data", ctrl.getAllData);
-
 router.get("/findByStatus", authenticate, isValidStatus, ctrl.getFavorites);
 
-router.get("/:id", authenticate, isValidId, ctrl.getById);
+router.get("/:productsId", authenticate, isValidId, ctrl.getById);
+
 router.post("/", authenticate, validateBody(sсhemas.addSchema), ctrl.add);
 
 router.put(
@@ -34,13 +34,13 @@ router.patch(
   "/:id/favorite",
   authenticate,
   validateBody(sсhemas.updateStatusFavorite),
-  ctrl.updateStatus
+  ctrl.toggleFavorite
 );
 router.patch(
   "/:id/basket",
   authenticate,
   validateBody(sсhemas.updateStatusBasket),
-  ctrl.updateStatus
+  ctrl.toggleFavorite
 );
 router.delete("/:id", authenticate, isValidId, ctrl.removeById);
 
