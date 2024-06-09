@@ -65,7 +65,7 @@ const productSchema = new Schema(
 productSchema.post("save", handlerMongooseError);
 
 const addSchema = Joi.object({
-  _id: Joi.string().required(),
+  _id: Joi.string(),
   id: Joi.number().required(),
   title: Joi.string().required(),
   image: Joi.string().required(),
@@ -83,7 +83,7 @@ const addSchema = Joi.object({
 });
 
 const updateStatusFavorite = Joi.object({
-  _id: Joi.string().required(),
+  _id: Joi.string(),
   id: Joi.number().required(),
   title: Joi.string().required(),
   image: Joi.string().required(),
@@ -100,7 +100,7 @@ const updateStatusFavorite = Joi.object({
   basket: Joi.boolean(),
 });
 const updateStatusBasket = Joi.object({
-  _id: Joi.string().required(),
+  _id: Joi.string(),
   id: Joi.number().required(),
   title: Joi.string().required(),
   image: Joi.string().required(),
