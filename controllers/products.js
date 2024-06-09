@@ -81,11 +81,14 @@ const updateStatus = async (req, res) => {
     throw HttpError(400, "Product ID is required");
   }
 
-  let updatedProduct;
   const existingProduct = await Product.findById(id);
-  if (existingProduct) {
+  if (!existingProduct) {
+    // Создаем новый продукт, если продукт не найден
+    const newProduct = await Product.create({ ...req.body, owner });
+    res.status(201).json(newProduct);
+  } else {
     // Обновляем поле существующего продукта
-    updatedProduct = await Product.findByIdAndUpdate(
+    const updatedProduct = await Product.findByIdAndUpdate(
       id,
       { ...req.body, owner },
       { new: true }
@@ -93,12 +96,8 @@ const updateStatus = async (req, res) => {
     if (!updatedProduct) {
       throw HttpError(404, "Product not found");
     }
-  } else {
-    // Создаем новый продукт, если продукт не найден
-    updatedProduct = await Product.create({ ...req.body, owner });
+    res.json(updatedProduct);
   }
-
-  res.json(updatedProduct);
 };
 
 module.exports = {
