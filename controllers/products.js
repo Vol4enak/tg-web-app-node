@@ -75,14 +75,14 @@ const updateById = async (req, res) => {
 
 const updateStatus = async (req, res) => {
   const { _id: owner } = req.user;
-  const { _id } = req.params;
+  const { id } = req.params;
 
   if (!id) {
     throw HttpError(400, "Product ID is required");
   }
 
   // Удаляем поле _id из req.body, если оно существует
-  const { id, ...restBody } = req.body;
+  const { _id, ...restBody } = req.body;
 
   const existingProduct = await Product.findById(id);
   if (!existingProduct) {
@@ -92,7 +92,7 @@ const updateStatus = async (req, res) => {
   } else {
     // Обновляем поле существующего продукта
     const updatedProduct = await Product.findByIdAndUpdate(
-      _id,
+      id,
       { ...restBody, owner },
       { new: true }
     );
