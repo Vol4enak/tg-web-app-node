@@ -6,6 +6,6 @@ const { sсhemas } = require("../../models/productStore");
 
 const ctrl = require("../../controllers/productsStore");
 
-router.get("/", ctrl.getAll);
+router.get("/data", ctrl.getAll);
 
 module.exports = router;

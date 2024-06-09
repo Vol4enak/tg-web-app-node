@@ -17,7 +17,7 @@ app.use(logger(formatsLogger));
 app.use(express.json());
 app.use(cors());
 app.use("/api/products", productsRoute);
-app.use("/api/productStore", ProductStoreRoute);
+app.use("/api/productstore", ProductStoreRoute);
 app.use("/api/auth", authRouter);
 app.use((req, res) => {
   res.status(404).json({ message: "Not found" });
