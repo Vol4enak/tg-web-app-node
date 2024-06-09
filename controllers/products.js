@@ -77,29 +77,30 @@ const updateStatus = async (req, res) => {
   const { _id: owner } = req.user;
   const { id } = req.params;
 
-  if (id) {
-    // Проверяем, существует ли продукт
-    const existingProduct = await Product.findById(id);
-    if (existingProduct) {
-      // Обновляем существующий продукт
-      const updatedProduct = { ...req.body, owner };
-      delete updatedProduct._id; // Удаляем _id из обновляемого объекта
-
-      const result = await Product.findByIdAndUpdate(id, updatedProduct, {
-        new: true,
-      });
-      if (!result) {
-        throw HttpError(404, "Product not found");
-      }
-      res.json(result);
-    } else {
-      // Создаем новый продукт, если он не существует
-      const newProduct = new Product({ ...req.body, owner });
-      await newProduct.save();
-      res.status(201).json(newProduct);
-    }
-  } else {
+  if (!id) {
     throw HttpError(400, "Product ID is required");
+  }
+
+  // Проверяем, существует ли продукт
+  let product = await Product.findById(id);
+
+  if (product) {
+    // Если продукт существует, обновляем его, удаляя поле _id из объекта обновления
+    const updateData = { ...req.body, owner };
+    delete updateData._id;
+
+    product = await Product.findByIdAndUpdate(id, updateData, { new: true });
+    if (!product) {
+      throw HttpError(404, "Product not found after update");
+    }
+    res.json(product);
+  } else {
+    // Если продукт не существует, создаем новый
+    const newProductData = { ...req.body, owner };
+    delete newProductData._id;
+
+    product = await Product.create(newProductData);
+    res.status(201).json(product);
   }
 };
 
