@@ -79,20 +79,36 @@ const addSchema = Joi.object({
 });
 
 const updateStatusFavorite = Joi.object({
-  favorite: Joi.boolean().required(),
-  owner: {
-    type: Schema.Types.ObjectId,
-    ref: "user",
-    require: true,
-  },
+  id: Joi.number().required(),
+  title: Joi.string().required(),
+  image: Joi.string().required(),
+  price: Joi.number().required(),
+  description: Joi.string().required(),
+  brand: Joi.string().required(),
+  model: Joi.string().required(),
+  color: Joi.string(),
+  category: Joi.string().required(),
+  popular: Joi.boolean(),
+  discount: Joi.number(),
+  onSale: Joi.boolean(),
+  favorite: Joi.boolean(),
+  basket: Joi.boolean(),
 });
 const updateStatusBasket = Joi.object({
+  id: Joi.number().required(),
+  title: Joi.string().required(),
+  image: Joi.string().required(),
+  price: Joi.number().required(),
+  description: Joi.string().required(),
+  brand: Joi.string().required(),
+  model: Joi.string().required(),
+  color: Joi.string(),
+  category: Joi.string().required(),
+  popular: Joi.boolean(),
+  discount: Joi.number(),
+  onSale: Joi.boolean(),
+  favorite: Joi.boolean(),
   basket: Joi.boolean(),
-  owner: {
-    type: Schema.Types.ObjectId,
-    ref: "user",
-    require: true,
-  },
 });
 
 const sсhemas = {
