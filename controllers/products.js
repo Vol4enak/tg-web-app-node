@@ -43,8 +43,7 @@ const getFavorites = async (req, res) => {
 
     res.json(favorites);
   } catch (error) {
-    
-    res.status(500).json({ message: 123 });
+    res.status(500).json({ message: error.message });
   }
 };
 
@@ -75,10 +74,12 @@ const updateById = async (req, res) => {
 };
 
 const updateStatus = async (req, res) => {
+  const { _id: owner } = req.user;
   const { id } = req.params;
-  const result = await Product.findByIdAndUpdate(id, req.body, {
+  const result = await Product.findByIdAndUpdate(...req.body, id, owner, {
     new: true,
   });
+  console.log(req.param.id);
   if (!result) {
     throw HttpError(404, "Not found");
   }

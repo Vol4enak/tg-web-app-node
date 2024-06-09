@@ -80,9 +80,19 @@ const addSchema = Joi.object({
 
 const updateStatusFavorite = Joi.object({
   favorite: Joi.boolean().required(),
+  owner: {
+    type: Schema.Types.ObjectId,
+    ref: "user",
+    require: true,
+  },
 });
 const updateStatusBasket = Joi.object({
-  basket: Joi.boolean().required(),
+  basket: Joi.boolean(),
+  owner: {
+    type: Schema.Types.ObjectId,
+    ref: "user",
+    require: true,
+  },
 });
 
 const sсhemas = {
