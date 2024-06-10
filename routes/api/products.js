@@ -6,16 +6,14 @@ const { sсhemas } = require("../../models/product");
 
 const {
   validateBody,
-  isValidId,
   authenticate,
-  isValidStatus,
 } = require("../../middlewares");
 
 const ctrl = require("../../controllers/products");
 
 router.get("/data", ctrl.getAllData);
-router.get("/findByStatus", authenticate, isValidStatus, ctrl.getFavorites);
-router.get("/findByCategory", isValidStatus, ctrl.getfindByCategory);
+router.get("/findByStatus", authenticate, ctrl.getFavorites);
+router.get("/findByCategory", ctrl.getfindByCategory);
 
 router.patch(
   "/:id/:name",
