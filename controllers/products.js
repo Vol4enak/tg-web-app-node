@@ -2,20 +2,8 @@ const { Product } = require("../models/product");
 const { User } = require("../models/user");
 const { HttpError, ctrlWrapper } = require("../helpers");
 
-const getAll = async (req, res) => {
-  const { _id: owner } = req.user;
-  const { page = 1, limit = 10 } = req.query;
-  const skip = (page - 1) * limit;
-  const result = await Product.find({ owner }, "-createAt -updatedAt", {
-    skip,
-    limit,
-  }).populate("owner", "email");
-
-  res.status(200).json(result);
-};
-
 const getAllData = async (req, res) => {
-  const { page = 1, limit = 10 } = req.query;
+  const { page = 1, limit = 150 } = req.query;
   const skip = (page - 1) * limit;
   const result = await Product.find({}, "-createAt -updatedAt", {
     skip,
@@ -24,28 +12,24 @@ const getAllData = async (req, res) => {
   res.status(200).json(result);
 };
 
-const getById = async (req, res) => {
-  const { id } = req.params;
-  const result = await Product.findById(id);
-  if (!result) {
-    throw HttpError(404, "Not found");
-  }
-  res.status(200).json(result);
-};
-
 const getFavorites = async (req, res) => {
   const { _id } = req.user;
   try {
-    const existingUser = await User.findById(_id).populate("favorites");
+    const existingUser = await User.findById(_id).populate("favorites basket");
     if (!existingUser) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({ message: "Пользователь не найден" });
     }
-    console.log(existingUser);
-    res.json(existingUser.favorites);
+    const filteredUser = {
+      favorites: existingUser.favorites,
+      basket: existingUser.basket,
+    };
+
+    res.json(filteredUser);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
+
 const getfindByCategory = async (req, res) => {
   const { category } = req.query; // Получаем категорию из параметров запроса
 
@@ -60,79 +44,60 @@ const getfindByCategory = async (req, res) => {
   }
 };
 
-const add = async (req, res) => {
-  const { _id: owner } = req.user;
-  const result = await Product.create({ ...req.body, owner });
-  res.status(201).json(result);
-};
-const removeById = async (req, res) => {
-  const { id } = req.params;
-  const result = await Product.findByIdAndRemove(id);
-  if (!result) {
-    throw HttpError(404, "Not found");
-  }
-  res.status(200).json({
-    message: "product deleted",
-  });
-};
-const updateById = async (req, res) => {
-  const { id } = req.params;
-  const result = await Product.findByIdAndUpdate(id, req.body, {
-    new: true,
-  });
-  if (!result) {
-    throw HttpError(404, "Not found");
-  }
-  res.json(result);
-};
-
 const toggleFavorite = async (req, res) => {
-  const { id } = req.params;
+  const { id, name } = req.params;
   const { _id } = req.user;
 
   try {
     const product = await Product.findById(id);
-
     if (!product) {
+      console.log("Product not found for ID:", id);
       return res.status(404).json({ message: "Product not found" });
     }
 
-    const existingUser = await User.findById(_id);
-
-    if (!existingUser) {
+    const user = await User.findById(_id);
+    if (!user) {
+      console.log("User not found for ID:", _id);
       return res.status(404).json({ message: "User not found" });
     }
 
-    // Проверяем, есть ли продукт в списке избранных
-    const productIndex = existingUser.favorites.findIndex(
-      (favoriteId) => favoriteId.toString() === id
-    );
-
-    if (productIndex !== -1) {
-      // Если продукт уже есть в избранном, удаляем его
-      existingUser.favorites.splice(productIndex, 1);
+    // Toggle favorite or basket
+    let targetArray, targetField;
+    if (name === "favorite") {
+      targetArray = user.favorites;
+      targetField = "favorite";
+    } else if (name === "basket") {
+      targetArray = user.basket;
+      targetField = "basket";
     } else {
-      // Если продукта нет в избранном, добавляем его
-      existingUser.favorites.push(product._id);
+      return res.status(400).json({ message: "Invalid target field" });
     }
 
-    await existingUser.save();
+    const index = targetArray.indexOf(product._id);
+    if (index !== -1) {
+      targetArray.splice(index, 1); // Remove if exists
+    } else {
+      targetArray.push(product._id); // Add if not exists
+    }
 
-    // Возвращаем обновленный объект продукта
-    res.json(existingUser);
+    await user.save();
+    console.log({ favorites: user.favorites, basket: user.basket });
+    res.json({ favorites: user.favorites, basket: user.basket }); // Respond with the updated array
   } catch (error) {
-    res.status(500).json({ message: "Internal server error" });
+    console.error(
+      "Failed to toggle favorite or basket for user:",
+      _id,
+      "with error:",
+      error
+    );
+    res
+      .status(500)
+      .json({ message: "Internal server error", error: error.message });
   }
 };
-
 module.exports = {
   getAllData: ctrlWrapper(getAllData),
   getFavorites: ctrlWrapper(getFavorites),
   getfindByCategory: ctrlWrapper(getfindByCategory),
-  getAll: ctrlWrapper(getAll),
-  getById: ctrlWrapper(getById),
-  add: ctrlWrapper(add),
-  removeById: ctrlWrapper(removeById),
-  updateById: ctrlWrapper(updateById),
   toggleFavorite: ctrlWrapper(toggleFavorite),
 };

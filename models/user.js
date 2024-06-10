@@ -30,6 +30,11 @@ const userSchema = new Schema(
       unique: true,
       default: [],
     },
+    basket: {
+      type: [{ type: Schema.Types.ObjectId, ref: "products" }],
+      unique: true,
+      default: [],
+    },
   },
   { versionKey: false, timestamps: true }
 );

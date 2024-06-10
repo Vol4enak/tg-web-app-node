@@ -13,35 +13,15 @@ const {
 
 const ctrl = require("../../controllers/products");
 
-router.get("/", authenticate, ctrl.getAll);
-
 router.get("/data", ctrl.getAllData);
 router.get("/findByStatus", authenticate, isValidStatus, ctrl.getFavorites);
 router.get("/findByCategory", isValidStatus, ctrl.getfindByCategory);
-router.get("/:productsId", authenticate, isValidId, ctrl.getById);
-
-router.post("/", authenticate, validateBody(sсhemas.addSchema), ctrl.add);
-
-router.put(
-  "/:id",
-  isValidId,
-  authenticate,
-  validateBody(sсhemas.addSchema),
-  ctrl.updateById
-);
 
 router.patch(
-  "/:id/favorite",
+  "/:id/:name",
   authenticate,
   validateBody(sсhemas.updateStatusFavorite),
   ctrl.toggleFavorite
 );
-router.patch(
-  "/:id/basket",
-  authenticate,
-  validateBody(sсhemas.updateStatusBasket),
-  ctrl.toggleFavorite
-);
-router.delete("/:id", authenticate, isValidId, ctrl.removeById);
 
 module.exports = router;
