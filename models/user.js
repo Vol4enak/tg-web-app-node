@@ -25,6 +25,11 @@ const userSchema = new Schema(
       type: String,
       default: "",
     },
+    favorites: {
+      type: [{ type: Schema.Types.ObjectId, ref: "products" }],
+      unique: true,
+      default: [],
+    },
   },
   { versionKey: false, timestamps: true }
 );

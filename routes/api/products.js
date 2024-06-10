@@ -17,7 +17,7 @@ router.get("/", authenticate, ctrl.getAll);
 
 router.get("/data", ctrl.getAllData);
 router.get("/findByStatus", authenticate, isValidStatus, ctrl.getFavorites);
-
+router.get("/findByCategory", isValidStatus, ctrl.getfindByCategory);
 router.get("/:productsId", authenticate, isValidId, ctrl.getById);
 
 router.post("/", authenticate, validateBody(sсhemas.addSchema), ctrl.add);

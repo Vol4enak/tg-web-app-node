@@ -42,19 +42,6 @@ const productSchema = new Schema(
     onSale: {
       type: Boolean,
     },
-    favorite: {
-      type: Boolean,
-      default: false,
-    },
-    basket: {
-      type: Boolean,
-      default: false,
-    },
-    owner: {
-      type: Schema.Types.ObjectId,
-      ref: "user",
-      require: true,
-    },
   },
   { versionKey: false }
 );
@@ -74,13 +61,10 @@ const addSchema = Joi.object({
   popular: Joi.boolean(),
   discount: Joi.number(),
   onSale: Joi.boolean(),
-  favorite: Joi.boolean(),
-  basket: Joi.boolean(),
 });
 
 const updateStatusFavorite = Joi.object({
   _id: Joi.string(),
-  favorite: Joi.boolean(),
 });
 const updateStatusBasket = Joi.object({
   basket: Joi.boolean(),

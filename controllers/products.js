@@ -1,5 +1,5 @@
 const { Product } = require("../models/product");
-
+const { User } = require("../models/user");
 const { HttpError, ctrlWrapper } = require("../helpers");
 
 const getAll = async (req, res) => {
@@ -34,16 +34,29 @@ const getById = async (req, res) => {
 };
 
 const getFavorites = async (req, res) => {
+  const { _id } = req.user;
   try {
-    const favorites = await Product.find({ favorite: true }); // Поиск всех продуктов с favorite: true
-
-    if (favorites.length === 0) {
-      return res.status(404).json({ message: "No favorite products found." });
+    const existingUser = await User.findById(_id).populate("favorites");
+    if (!existingUser) {
+      return res.status(404).json({ message: "User not found" });
     }
-
-    res.json(favorites);
+    console.log(existingUser);
+    res.json(existingUser.favorites);
   } catch (error) {
     res.status(500).json({ message: error.message });
+  }
+};
+const getfindByCategory = async (req, res) => {
+  const { category } = req.query; // Получаем категорию из параметров запроса
+
+  try {
+    // Ищем объекты по категории в базе данных
+    const products = await Product.find({ category });
+
+    res.json(products);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
   }
 };
 
@@ -74,35 +87,40 @@ const updateById = async (req, res) => {
 };
 
 const toggleFavorite = async (req, res) => {
-  const { id } = req.params; // Получаем идентификатор товара из параметров запроса
-  const { userId } = req.user; // Получаем идентификатор пользователя из токена или сессии
+  const { id } = req.params;
+  const { _id } = req.user;
 
   try {
-    // Находим товар в базе данных
     const product = await Product.findById(id);
-    console.log(product);
-    // Проверяем, существует ли товар с указанным идентификатором
+
     if (!product) {
       return res.status(404).json({ message: "Product not found" });
     }
 
-    // Обновляем поле favorite товара на противоположное текущему значению
-    product.favorite = !product.favorite;
+    const existingUser = await User.findById(_id);
 
-    // Если товар добавляется в избранное, сохраняем идентификатор пользователя, который это сделал
-    if (product.favorite) {
-      product.addedBy = userId;
-    } else {
-      product.addedBy = null; // Убираем информацию о пользователе, если товар убирается из избранного
+    if (!existingUser) {
+      return res.status(404).json({ message: "User not found" });
     }
 
-    // Сохраняем обновленный товар в базе данных
-    await product.save();
+    // Проверяем, есть ли продукт в списке избранных
+    const productIndex = existingUser.favorites.findIndex(
+      (favoriteId) => favoriteId.toString() === id
+    );
 
-    // Возвращаем обновленный товар в ответе
-    res.json(product);
+    if (productIndex !== -1) {
+      // Если продукт уже есть в избранном, удаляем его
+      existingUser.favorites.splice(productIndex, 1);
+    } else {
+      // Если продукта нет в избранном, добавляем его
+      existingUser.favorites.push(product._id);
+    }
+
+    await existingUser.save();
+
+    // Возвращаем обновленный объект продукта
+    res.json(existingUser);
   } catch (error) {
-    console.error(error);
     res.status(500).json({ message: "Internal server error" });
   }
 };
@@ -110,6 +128,7 @@ const toggleFavorite = async (req, res) => {
 module.exports = {
   getAllData: ctrlWrapper(getAllData),
   getFavorites: ctrlWrapper(getFavorites),
+  getfindByCategory: ctrlWrapper(getfindByCategory),
   getAll: ctrlWrapper(getAll),
   getById: ctrlWrapper(getById),
   add: ctrlWrapper(add),
