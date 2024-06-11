@@ -15,6 +15,7 @@ app.use(express.json());
 app.use(cors());
 app.use("/api/products", productsRoute);
 app.use("/api/auth", authRouter);
+
 app.use((req, res) => {
   res.status(404).json({ message: "Not found" });
 });
@@ -44,15 +45,11 @@ bot.on("message", async (msg) => {
       }
     );
   }
-
   if (msg?.web_app_data?.data) {
     try {
       const data = JSON.parse(msg?.web_app_data?.data);
 
-      await bot.sendMessage(chatId, "спасибо за заказ");
-      await bot.sendMessage(chatId, "страна:" + " " + data?.country);
-      await bot.sendMessage(chatId, "город:" + " " + data?.street);
-      await bot.sendMessage(chatId, "чтото:" + " " + data?.subject);
+      await bot.sendMessage(chatId, "Дякую за замовлення");
       setTimeout(async () => {
         await bot.sendMessage(chatId, "всю инфу отправили");
       }, 3000);
@@ -61,7 +58,6 @@ bot.on("message", async (msg) => {
     }
   }
 });
-
 app.post("/web-data", async (req, res) => {
   const { queryId, products, totalPrice } = req.body;
 
