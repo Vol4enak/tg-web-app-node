@@ -4,6 +4,7 @@ const { HttpError, ctrlWrapper } = require("../helpers");
 
 const getAllData = async (req, res) => {
   const { page = 1, limit = 150 } = req.query;
+
   const skip = (page - 1) * limit;
   const result = await Product.find({}, "-createAt -updatedAt", {
     skip,
