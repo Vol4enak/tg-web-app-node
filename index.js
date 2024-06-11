@@ -6,8 +6,6 @@ const productsRoute = require("./routes/api/products");
 const authRouter = require("./routes/api/auth");
 const token = "6747409661:AAEMQbvDDhrESv6zPqNwSv8IiYbp9C2Vvic";
 const wedAppUrl = "https://adorable-lebkuchen-d0f7d9.netlify.app";
-// const token = require("./config");
-// const wedAppUrl = require("./config");
 const bot = new TelegramBot(token, { polling: true });
 const app = express();
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
@@ -34,14 +32,17 @@ bot.on("message", async (msg) => {
   const text = msg.text;
 
   if (text === "/start") {
-
-    await bot.sendMessage(chatId, "Заходи к нам", {
-      reply_markup: {
-        inline_keyboard: [
-          [{ text: "сделать заказ", web_app: { url: wedAppUrl } }],
-        ],
-      },
-    });
+    await bot.sendMessage(
+      chatId,
+      "Ласкаво просимо до нашого Telegram-бот. Тут ви можете отримати інформацію про наш асортимент товарів, їх характеристики та поточні акції.",
+      {
+        reply_markup: {
+          inline_keyboard: [
+            [{ text: "Перейти до магазину", web_app: { url: wedAppUrl } }],
+          ],
+        },
+      }
+    );
   }
 
   if (msg?.web_app_data?.data) {
