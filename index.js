@@ -65,9 +65,9 @@ app.post("/web-data", async (req, res) => {
     await bot.answerWebAppQuery(queryId, {
       type: "article",
       id: queryId,
-      title: "Успешна покупка",
+      title: "Успішна покупка",
       input_message_content: {
-        message_text: "конграц с покупкой товара на:" + totalPrice,
+        message_text: "Вітаемо з покупкою товара на:" + totalPrice,
       },
     });
     return res.status(200).json({});
